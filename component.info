@@ -1,0 +1,8 @@
+name = Component
+description = Components are swappable system components
+core = 7.x
+files[] = component.controllers.inc
+files[] = component.context.inc
+files[] = component.components.inc
+files[] = component.module
+files[] = component.test

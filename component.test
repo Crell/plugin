@@ -1,0 +1,103 @@
+<?php
+
+class ComponentTestCase extends DrupalWebTestCase {
+  protected $regions;
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Component tests',
+      'description' => 'Basic component tests.',
+      'group' => 'Component',
+    );
+  }
+
+  function setUp() {
+    parent::setUp('component', 'component_test');
+  }
+
+  /**
+   * Confirm that a new component type registers properly.
+   */
+  function testTypeRegistration() {
+    $types = component_type_get_info();
+    $type_names = array_keys($types);
+    $this->assertTrue(in_array('fancystring', $type_names), t('Component type is registered'));
+  }
+
+  /**
+   * Confirm that test components register properly from the info hook.
+   */
+  function testBasicHookRegistration() {
+    $components = component_get_info('fancystring');
+
+    $component_names = array_keys($components);
+    $this->assertTrue(in_array('rot13', $component_names), t('Component type is registered from type-specific hook'));
+  }
+
+  /**
+   * Confirm that test components register properly from the alter hook.
+   */
+  function testAlterHookRegistration() {
+    $components = component_get_info('fancystring');
+
+    $component_names = array_keys($components);
+    $this->assertTrue(in_array('rot', $component_names), t('Component type is registered from type-specific alter hook'));
+  }
+
+  /**
+   * Confirm that test components register properly from an info file.
+   */
+  function testInfoRegistration() {
+    $components = component_get_info('fancystring');
+
+    $component_names = array_keys($components);
+    $this->assertTrue(in_array('uppercase', $component_names), t('Component type is registered from info file'));
+  }
+
+
+  /**
+   * Confirm that we get the right controller for a given component type.
+   */
+  function testController() {
+    $controller = component_controller('fancystring');
+
+    $this->assertTrue($controller instanceof ComponentControllerVariableReuse, t('Correct controller class returned.'));
+  }
+
+  /**
+   * Confirm that if there is no default configuration, we get nothing.
+   */
+  function testDefaultComponent() {
+    $component = component('fancystring');
+
+    $this->assertTrue($component instanceof FancyStringDummy, t('Correct component class returned.'));
+  }
+
+}
+
+class ComponentTestCommonClassCase extends DrupalWebTestCase {
+  protected $regions;
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Component common class tests',
+      'description' => 'Test components with a common class.',
+      'group' => 'Component',
+    );
+  }
+
+  function setUp() {
+    parent::setUp('component', 'component_test');
+  }
+
+  /**
+   * Confirm that we get the right controller for a given component type.
+   */
+  function testComponentHello() {
+    $component = component('callback_test');
+
+    $this->assertEqual($component->runCallback(), t('Hello world'), t('Passed through to callback properly.'));
+  }
+
+}
+

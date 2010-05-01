@@ -1,0 +1,6 @@
+name = Component Test
+description = Test module for components
+core = 7.x
+files[] = component_test.module
+hidden = TRUE
+dependencies[] = component

@@ -1,0 +1,68 @@
+<?php
+
+function component_test_component_type_info() {
+
+	$types['fancystring'] = array(
+    'title' => t('Fancy string mangling'),
+    'description' => t('Mutate strings in various ways'),
+    'interface' => 'FancyStringComponentInterface',
+    'context' => 'FancyStringContextInterface',
+    'controller' => 'ComponentControllerVariableReuse',
+    'default' => 'FancyStringDummy',
+		);
+
+	return $types;
+}
+
+function component_test_component_info() {
+
+  $components['dummy'] = array(
+    'title' => t('Dummy'),
+    'description' => t('Dummy implementation that does nothing.'),
+    'class' => 'FancyStringDummy',
+  );
+	 $components['rot13'] = array(
+    'title' => t('ROT 13'),
+    'description' => t('ROT13 encode a string'),
+    'class' => 'FancyStringRot13',
+  );
+
+	return $components;
+}
+
+function component_test_component_info_alter(&$components) {
+  $components['rot'] = array(
+    'title' => t('ROT'),
+    'description' => t('ROT encode a string to an arbitrary number.'),
+    'class' => 'FancyStringRot',
+    'context' => 'FancyStringRotContext',
+  );
+}
+
+interface FancyStringComponentInterface extends ComponentInterface {
+
+  public function mutate($string);
+}
+
+class FancyStringRot13 extends ComponentBaseAbstract implements FancystringComponentInterface {
+
+	public function mutate($string) {
+    return str_rot13($string);
+	}
+}
+
+class FancyStringRot extends ComponentBaseAbstract implements FancyStringComponentInterface {
+
+  public function mutate($string) {
+    // @TODO: Implement this.
+    return $string;
+  }
+
+}
+
+class FancyStringDummy extends ComponentBaseAbstract implements FancyStringComponentInterface {
+  public function mutate($string) {
+    return $string;
+  }
+}
+
