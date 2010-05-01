@@ -1,37 +1,37 @@
 <?php
 
-function component_test_component_type_info() {
+function plugin_test_plugin_type_info() {
 
 	$types['fancystring'] = array(
     'title' => t('Fancy string mangling'),
     'description' => t('Mutate strings in various ways'),
-    'interface' => 'FancyStringComponentInterface',
+    'interface' => 'FancyStringPluginInterface',
     'context' => 'FancyStringContextInterface',
-    'controller' => 'ComponentControllerVariableReuse',
+    'controller' => 'PluginControllerVariableReuse',
     'default' => 'FancyStringDummy',
 		);
 
 	return $types;
 }
 
-function component_test_component_info() {
+function plugin_test_plugin_info() {
 
-  $components['dummy'] = array(
+  $plugins['dummy'] = array(
     'title' => t('Dummy'),
     'description' => t('Dummy implementation that does nothing.'),
     'class' => 'FancyStringDummy',
   );
-	 $components['rot13'] = array(
+	 $plugins['rot13'] = array(
     'title' => t('ROT 13'),
     'description' => t('ROT13 encode a string'),
     'class' => 'FancyStringRot13',
   );
 
-	return $components;
+	return $plugins;
 }
 
-function component_test_component_info_alter(&$components) {
-  $components['rot'] = array(
+function plugin_test_plugin_info_alter(&$plugins) {
+  $plugins['rot'] = array(
     'title' => t('ROT'),
     'description' => t('ROT encode a string to an arbitrary number.'),
     'class' => 'FancyStringRot',
@@ -39,19 +39,19 @@ function component_test_component_info_alter(&$components) {
   );
 }
 
-interface FancyStringComponentInterface extends ComponentInterface {
+interface FancyStringPluginInterface extends PluginInterface {
 
   public function mutate($string);
 }
 
-class FancyStringRot13 extends ComponentBaseAbstract implements FancystringComponentInterface {
+class FancyStringRot13 extends PluginBaseAbstract implements FancystringPluginInterface {
 
 	public function mutate($string) {
     return str_rot13($string);
 	}
 }
 
-class FancyStringRot extends ComponentBaseAbstract implements FancyStringComponentInterface {
+class FancyStringRot extends PluginBaseAbstract implements FancyStringPluginInterface {
 
   public function mutate($string) {
     // @TODO: Implement this.
@@ -60,7 +60,7 @@ class FancyStringRot extends ComponentBaseAbstract implements FancyStringCompone
 
 }
 
-class FancyStringDummy extends ComponentBaseAbstract implements FancyStringComponentInterface {
+class FancyStringDummy extends PluginBaseAbstract implements FancyStringPluginInterface {
   public function mutate($string) {
     return $string;
   }

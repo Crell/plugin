@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Main interface for all Components.
+ * Main interface for all Plugins.
  */
-interface ComponentInterface {
+interface PluginInterface {
 
   /**
    * Constructor
@@ -11,8 +11,8 @@ interface ComponentInterface {
    * @param $context
    *   The context object bound to this controller and routing information.
    * @param $definition
-   *   The definition array used to declare this component.  This is useful
-   *   when several components share a single class implementation.
+   *   The definition array used to declare this plugin.  This is useful
+   *   when several plugins share a single class implementation.
    * @param array $routing
    *   The routing information that was used to load this controller. Some
    *   controllers may make use of that information.
@@ -22,14 +22,14 @@ interface ComponentInterface {
 }
 
 /**
- * A base implementation of a component object.
+ * A base implementation of a plugin object.
  */
-class ComponentBaseAbstract implements ComponentInterface {
+class PluginBaseAbstract implements PluginInterface {
 
   /**
-   * The context object for this component.
+   * The context object for this plugin.
    *
-   * @var ComponentContextInterface
+   * @var PluginContextInterface
    */
   protected $context;
 

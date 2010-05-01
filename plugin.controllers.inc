@@ -1,124 +1,124 @@
 <?php
 
 /**
- * Main interface for all component controllers.
+ * Main interface for all plugin controllers.
  */
-interface ComponentControllerInterface {
+interface PluginControllerInterface {
 
   /**
    * Constructor
    *
    * @param $type
-   *   The component type this controller is managing.
+   *   The plugin type this controller is managing.
    */
   public function __construct($type);
 
   /**
-   * Load the component associated with the specified routing information.
+   * Load the plugin associated with the specified routing information.
    *
    * @param array $routing
    *   An associative array of values that will be used to determine which
-   *   component is appropriate. The keys of the array are controller-dependent.
-   * @return ComponentInterface
+   *   plugin is appropriate. The keys of the array are controller-dependent.
+   * @return PluginInterface
    */
   public function load(array $routing = array());
 
   /**
-   * Attach the specified component and context with the specified routing information.
+   * Attach the specified plugin and context with the specified routing information.
    *
-   * @param  $component
-   *   The internal name of the component.
-   * @param ComponentContextInterface $context
-   *   The context object to use for this component.
+   * @param  $plugin
+   *   The internal name of the plugin.
+   * @param PluginContextInterface $context
+   *   The context object to use for this plugin.
    * @param array $routing
-   *   An array of routing information that should retrieve this component and
+   *   An array of routing information that should retrieve this plugin and
    *   context. The keys of the array are controller-dependent.
    * @return unknown_type
    */
-  public function attach($component, ComponentContextInterface $context, array $routing = array());
+  public function attach($plugin, PluginContextInterface $context, array $routing = array());
 
   /**
-   * Detach any specified component from the specified routing information.
+   * Detach any specified plugin from the specified routing information.
    *
    * @param array $routing
-   *   The routing information from which to remove any configured component.
+   *   The routing information from which to remove any configured plugin.
    * @return unknown_type
    */
   public function detach(array $routing);
 
   /**
-   * Set a default component to use if no other component resolves.
+   * Set a default plugin to use if no other plugin resolves.
    *
-   * @param $component
-   *   The internal name of the component.
-   * @param ComponentContextInterface $context
-   *   The context object to use for this component.
+   * @param $plugin
+   *   The internal name of the plugin.
+   * @param PluginContextInterface $context
+   *   The context object to use for this plugin.
    * @return unknown_type
    */
-  public function setDefault($component, ComponentContextInterface $context);
+  public function setDefault($plugin, PluginContextInterface $context);
 
   /**
-   * Set default properties for a component.
+   * Set default properties for a plugin.
    *
    * @param $info
    *   An associative array containing the properties specified by the
    *   corresponding info hook.  This method should modify this array in-place
    *   to set any appropriate defaults for unset values.
    */
-  public function setComponentDefaults(&$info);
+  public function setPluginDefaults(&$info);
 }
 
 
 /**
  * Simple controller that uses single-axis routing.
  *
- * This controller can also be used for "no routing" component types by just
+ * This controller can also be used for "no routing" plugin types by just
  * not specifying any routing information. Routing information is stored
  * to the variable system for fast lookup. Note that it is not well suited
  * for controllers with highly complex context objects as those will bloat
  * the variable table.
  */
-class ComponentControllerVariable implements ComponentControllerInterface {
+class PluginControllerVariable implements PluginControllerInterface {
 
   /**
-   * The component type this controller is managing.
+   * The plugin type this controller is managing.
    *
    * @var string
    */
-  protected $componentType;
+  protected $pluginType;
 
   /**
-   * The info array for this component type.
+   * The info array for this plugin type.
    *
    * @var array
    */
   protected $typeInfo;
 
   public function __construct($type) {
-    $this->componentType = $type;
-    $this->typeInfo = component_type_get_info($type);
+    $this->pluginType = $type;
+    $this->typeInfo = plugin_type_get_info($type);
   }
 
   public function load(array $routing = array()) {
 
     $routing += array('key' => 'default');
-    $variable = 'component_' . $this->componentType . '_' . $routing['key'];
-    $component = variable_get($variable, NULL);
-    if ($component) {
-      list($component, $context) = $component;
+    $variable = 'plugin_' . $this->pluginType . '_' . $routing['key'];
+    $plugin = variable_get($variable, NULL);
+    if ($plugin) {
+      list($plugin, $context) = $plugin;
       $context = unserialize($context);
-      $component_info = component_get_info($this->componentType, $component);
-      return new $component_info['class']($context, $component_info, $routing);
+      $plugin_info = plugin_get_info($this->pluginType, $plugin);
+      return new $plugin_info['class']($context, $plugin_info, $routing);
     }
     else {
-      $component = $this->typeInfo['default'];
-      $component_info = component_get_info($this->componentType, $component);
-      $context = new $component_info['context'];
-      return new $component_info['class']($context, $component_info, $routing);
+      $plugin = $this->typeInfo['default'];
+      $plugin_info = plugin_get_info($this->pluginType, $plugin);
+      $context = new $plugin_info['context'];
+      return new $plugin_info['class']($context, $plugin_info, $routing);
     }
   }
 
-  public function attach($component, ComponentContextInterface $context, array $routing = array()) {
+  public function attach($plugin, PluginContextInterface $context, array $routing = array()) {
 
   }
 
@@ -126,11 +126,11 @@ class ComponentControllerVariable implements ComponentControllerInterface {
 
   }
 
-  public function setDefault($component, ComponentContextInterface $context) {
+  public function setDefault($plugin, PluginContextInterface $context) {
 
   }
 
-  public function setComponentDefaults(&$info) {
+  public function setPluginDefaults(&$info) {
 
   }
 
@@ -140,24 +140,24 @@ class ComponentControllerVariable implements ComponentControllerInterface {
  * Simple controller with single-axis routing that reuses controllers if available.
  *
  */
-class ComponentControllerVariableReuse extends ComponentControllerVariable {
+class PluginControllerVariableReuse extends PluginControllerVariable {
 
   /**
-   * Cache of created components.
+   * Cache of created plugins.
    *
    * @var array
    */
-  protected $components = array();
+  protected $plugins = array();
 
   public function load(array $routing = array()) {
     $routing += array('key' => 'default');
 
     $key = $routing['key'];
 
-    if (empty($this->components[$key])) {
-      $this->components[$key] = parent::load($routing);
+    if (empty($this->plugins[$key])) {
+      $this->plugins[$key] = parent::load($routing);
     }
 
-    return $this->components[$key];
+    return $this->plugins[$key];
   }
 }

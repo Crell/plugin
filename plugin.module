@@ -2,31 +2,31 @@
 
 
 /**
- * Get the component type info array of a component type.
+ * Get the plugin type info array of a plugin type.
  *
- * @see hook_component_type_info()
- * @see hook_component_type_info_alter()
+ * @see hook_plugin_type_info()
+ * @see hook_plugin_type_info_alter()
  *
  * @param $type
- *   The component type for which the info shall be returned, or NULL
+ *   The plugin type for which the info shall be returned, or NULL
  *   to return an array with info about all types.
  */
-function component_type_get_info($type = NULL) {
+function plugin_type_get_info($type = NULL) {
   $type_info = &drupal_static(__FUNCTION__, array());
 
   if (empty($type_info)) {
-    if ($cache = cache_get('component_type_info')) {
+    if ($cache = cache_get('plugin_type_info')) {
       $type_info = $cache->data;
     }
     else {
-      $type_info = module_invoke_all('component_type_info');
+      $type_info = module_invoke_all('plugin_type_info');
       // Merge in default values.
       foreach ($type_info as $name => $data) {
-        $type_info[$name] += component_type_defaults();
+        $type_info[$name] += plugin_type_defaults();
       }
       // Let other modules alter the type info.
-      drupal_alter('component_type_info', $type_info);
-      cache_set('component_type_info', $type_info);
+      drupal_alter('plugin_type_info', $type_info);
+      cache_set('plugin_type_info', $type_info);
     }
   }
 
@@ -34,40 +34,40 @@ function component_type_get_info($type = NULL) {
 }
 
 /**
- * Get the component type info array of a component type.
+ * Get the plugin type info array of a plugin type.
  *
- * @see hook_component_$type_info()
- * @see hook_component_$type_info_alter()
+ * @see hook_plugin_$type_info()
+ * @see hook_plugin_$type_info_alter()
  *
  * @param $type
- *   The component type for which the info shall be returned.
- * @param $component
- *   The component for which the info shall be returned, or NULL
- *   to return an array with info about all components of this type.
+ *   The plugin type for which the info shall be returned.
+ * @param $plugin
+ *   The plugin for which the info shall be returned, or NULL
+ *   to return an array with info about all plugins of this type.
  */
-function component_get_info($type, $component = NULL) {
-  $component_info = &drupal_static(__FUNCTION__, array());
+function plugin_get_info($type, $plugin = NULL) {
+  $plugin_info = &drupal_static(__FUNCTION__, array());
 
-  $info_key = 'component_info_' . $type;
+  $info_key = 'plugin_info_' . $type;
 
-  if (empty($component_info[$type])) {
+  if (empty($plugin_info[$type])) {
     if ($cache = cache_get($info_key)) {
-      $component_info[$type] = $cache->data;
+      $plugin_info[$type] = $cache->data;
     }
     else {
-      $controller = component_controller($type);
+      $controller = plugin_controller($type);
 
-      // The preferred place to register a component is via the type-specific
-      // component info hook.
-      $component_info[$type] = module_invoke_all('component_' . $type . '_info');
+      // The preferred place to register a plugin is via the type-specific
+      // plugin info hook.
+      $plugin_info[$type] = module_invoke_all('plugin_' . $type . '_info');
 
       // Registration via info files is also supported.
       $modules = system_get_info('module');
       //dpm($modules);
       foreach ($modules as $module => $info) {
         if (!empty($info['plugins'][$type])) {
-          foreach ($info['plugins'][$type] as $component_key => $file) {
-            $component_info[$type][$component_key] = drupal_parse_info_file(drupal_get_path('module', $module) . '/' . $file);
+          foreach ($info['plugins'][$type] as $plugin_key => $file) {
+            $plugin_info[$type][$plugin_key] = drupal_parse_info_file(drupal_get_path('module', $module) . '/' . $file);
           }
         }
       }
@@ -75,78 +75,78 @@ function component_get_info($type, $component = NULL) {
       // Merge in default data.  Type-specific defaults take priority
       // over generic defaults, allowing controllers to override the global
       // defaults if desired.
-      foreach ($component_info[$type] as $component_key => &$data) {
-        $controller->setComponentDefaults($data);
-        $component_info[$type][$component_key] += component_defaults();
+      foreach ($plugin_info[$type] as $plugin_key => &$data) {
+        $controller->setPluginDefaults($data);
+        $plugin_info[$type][$plugin_key] += plugin_defaults();
       }
       unset($data);
 
-      // Let other modules alter the component info.
-      drupal_alter($info_key, $component_info[$type]);
+      // Let other modules alter the plugin info.
+      drupal_alter($info_key, $plugin_info[$type]);
 
-      cache_set($info_key, $component_info[$type]);
+      cache_set($info_key, $plugin_info[$type]);
     }
   }
 
-  if (!empty($component)) {
-    return $component_info[$type][$component];
+  if (!empty($plugin)) {
+    return $plugin_info[$type][$plugin];
   }
 
-  return $component_info[$type];
+  return $plugin_info[$type];
 }
 
 /**
- * Default values for component type definitions.
+ * Default values for plugin type definitions.
  */
-function component_type_defaults() {
+function plugin_type_defaults() {
   return array(
     'title' => '',
     'description' => '',
-    'interface' => 'ComponentInterface',
-    'context' => 'ComponentContextInterface',
-    'controller' => 'ComponentControllerVariableReuse',
+    'interface' => 'PluginInterface',
+    'context' => 'PluginContextInterface',
+    'controller' => 'PluginControllerVariableReuse',
     'default' => '',
   );
 }
 
 /**
- * Default values for component definitions.
+ * Default values for plugin definitions.
  */
-function component_defaults() {
+function plugin_defaults() {
   return array(
     'title' => '',
     'description' => '',
-    'class' => 'ComponentBase',
-    'context' => 'ComponentContextNull',
+    'class' => 'PluginBase',
+    'context' => 'PluginContextNull',
   );
 }
 
 /**
- * Retrieve the component attached to the specified type and routing data.
+ * Retrieve the plugin attached to the specified type and routing data.
  *
  * @param $type
- *   The component type for which we want a component.
+ *   The plugin type for which we want a plugin.
  * @param array $routing
- *   The routing information to determine what component we want.
+ *   The routing information to determine what plugin we want.
  *   The keys of the array are controller-dependent.
- * @return ComponentInterface
+ * @return PluginInterface
  */
-function component($type, array $routing = array()) {
-  return component_controller($type)->load($routing);
+function plugin($type, array $routing = array()) {
+  return plugin_controller($type)->load($routing);
 }
 
 /**
- * Retrieve the controller object for a given component type.
+ * Retrieve the controller object for a given plugin type.
  *
  * @param $type
- *   The component type for which we want the controller
- * @return ComponentControllerInterface
+ *   The plugin type for which we want the controller
+ * @return PluginControllerInterface
  */
-function component_controller($type) {
+function plugin_controller($type) {
   $controllers = &drupal_static(__FUNCTION__ . '_controllers', array());
 
   if (empty($controllers[$type])) {
-    $type_info = component_type_get_info($type);
+    $type_info = plugin_type_get_info($type);
     $controllers[$type] = new $type_info['controller']($type);
   }
 

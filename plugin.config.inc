@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Main interface for all component context objects.
+ * Main interface for all plugin context objects.
  */
-interface ComponentContextInterface {
+interface PluginContextInterface {
 
   /**
    * Define the available options for this context, and their defaults.
@@ -37,13 +37,13 @@ interface ComponentContextInterface {
 
 
 /**
- * Null implementation of component context.
+ * Null implementation of plugin context.
  *
- * This is useful for components that do not have configuration.
+ * This is useful for plugins that do not have configuration.
  * @author lgarfiel
  *
  */
-class ComponentContextNull implements ComponentContextInterface {
+class PluginContextNull implements PluginContextInterface {
 
   public function options() {
     return array();
@@ -59,9 +59,9 @@ class ComponentContextNull implements ComponentContextInterface {
 }
 
 /**
- * A base implementation of a component context object.
+ * A base implementation of a plugin context object.
  */
-abstract class ComponentContextBaseAbstract implements ComponentContextInterface {
+abstract class PluginContextBaseAbstract implements PluginContextInterface {
 
   /**
    * The options stored in this context object.

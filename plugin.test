@@ -1,102 +1,102 @@
 <?php
 
-class ComponentTestCase extends DrupalWebTestCase {
+class PluginTestCase extends DrupalWebTestCase {
   protected $regions;
 
   public static function getInfo() {
     return array(
-      'name' => 'Component tests',
-      'description' => 'Basic component tests.',
-      'group' => 'Component',
+      'name' => 'Plugin tests',
+      'description' => 'Basic plugin tests.',
+      'group' => 'Plugin',
     );
   }
 
   function setUp() {
-    parent::setUp('component', 'component_test');
+    parent::setUp('plugin', 'plugin_test');
   }
 
   /**
-   * Confirm that a new component type registers properly.
+   * Confirm that a new plugin type registers properly.
    */
   function testTypeRegistration() {
-    $types = component_type_get_info();
+    $types = plugin_type_get_info();
     $type_names = array_keys($types);
-    $this->assertTrue(in_array('fancystring', $type_names), t('Component type is registered'));
+    $this->assertTrue(in_array('fancystring', $type_names), t('Plugin type is registered'));
   }
 
   /**
-   * Confirm that test components register properly from the info hook.
+   * Confirm that test plugins register properly from the info hook.
    */
   function testBasicHookRegistration() {
-    $components = component_get_info('fancystring');
+    $plugins = plugin_get_info('fancystring');
 
-    $component_names = array_keys($components);
-    $this->assertTrue(in_array('rot13', $component_names), t('Component type is registered from type-specific hook'));
+    $plugin_names = array_keys($plugins);
+    $this->assertTrue(in_array('rot13', $plugin_names), t('Plugin type is registered from type-specific hook'));
   }
 
   /**
-   * Confirm that test components register properly from the alter hook.
+   * Confirm that test plugins register properly from the alter hook.
    */
   function testAlterHookRegistration() {
-    $components = component_get_info('fancystring');
+    $plugins = plugin_get_info('fancystring');
 
-    $component_names = array_keys($components);
-    $this->assertTrue(in_array('rot', $component_names), t('Component type is registered from type-specific alter hook'));
+    $plugin_names = array_keys($plugins);
+    $this->assertTrue(in_array('rot', $plugin_names), t('Plugin type is registered from type-specific alter hook'));
   }
 
   /**
-   * Confirm that test components register properly from an info file.
+   * Confirm that test plugins register properly from an info file.
    */
   function testInfoRegistration() {
-    $components = component_get_info('fancystring');
+    $plugins = plugin_get_info('fancystring');
 
-    $component_names = array_keys($components);
-    $this->assertTrue(in_array('uppercase', $component_names), t('Component type is registered from info file'));
+    $plugin_names = array_keys($plugins);
+    $this->assertTrue(in_array('uppercase', $plugin_names), t('Plugin type is registered from info file'));
   }
 
 
   /**
-   * Confirm that we get the right controller for a given component type.
+   * Confirm that we get the right controller for a given plugin type.
    */
   function testController() {
-    $controller = component_controller('fancystring');
+    $controller = plugin_controller('fancystring');
 
-    $this->assertTrue($controller instanceof ComponentControllerVariableReuse, t('Correct controller class returned.'));
+    $this->assertTrue($controller instanceof PluginControllerVariableReuse, t('Correct controller class returned.'));
   }
 
   /**
    * Confirm that if there is no default configuration, we get nothing.
    */
-  function testDefaultComponent() {
-    $component = component('fancystring');
+  function testDefaultPlugin() {
+    $plugin = plugin('fancystring');
 
-    $this->assertTrue($component instanceof FancyStringDummy, t('Correct component class returned.'));
+    $this->assertTrue($plugin instanceof FancyStringDummy, t('Correct plugin class returned.'));
   }
 
 }
 
-class ComponentTestCommonClassCase extends DrupalWebTestCase {
+class PluginTestCommonClassCase extends DrupalWebTestCase {
   protected $regions;
 
   public static function getInfo() {
     return array(
-      'name' => 'Component common class tests',
-      'description' => 'Test components with a common class.',
-      'group' => 'Component',
+      'name' => 'Plugin common class tests',
+      'description' => 'Test plugins with a common class.',
+      'group' => 'Plugin',
     );
   }
 
   function setUp() {
-    parent::setUp('component', 'component_test');
+    parent::setUp('plugin', 'plugin_test');
   }
 
   /**
-   * Confirm that we get the right controller for a given component type.
+   * Confirm that we get the right controller for a given plugin type.
    */
-  function testComponentHello() {
-    $component = component('callback_test');
+  function testPluginHello() {
+    $plugin = plugin('callback_test');
 
-    $this->assertEqual($component->runCallback(), t('Hello world'), t('Passed through to callback properly.'));
+    $this->assertEqual($plugin->runCallback(), t('Hello world'), t('Passed through to callback properly.'));
   }
 
 }

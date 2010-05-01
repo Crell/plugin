@@ -1,6 +1,6 @@
-name = Component Test
-description = Test module for components
+name = Plugin Test
+description = Test module for plugins
 core = 7.x
-files[] = component_test.module
+files[] = plugin_test.module
 hidden = TRUE
-dependencies[] = component
+dependencies[] = plugin
