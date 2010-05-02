@@ -8,8 +8,8 @@ interface PluginInterface {
   /**
    * Constructor
    *
-   * @param $context
-   *   The context object bound to this controller and routing information.
+   * @param $config
+   *   The config object bound to this controller and routing information.
    * @param $definition
    *   The definition array used to declare this plugin.  This is useful
    *   when several plugins share a single class implementation.
@@ -17,7 +17,7 @@ interface PluginInterface {
    *   The routing information that was used to load this controller. Some
    *   controllers may make use of that information.
    */
-  public function __construct($context, array $definition, array $routing = array());
+  public function __construct($config, array $definition, array $routing = array());
 
 }
 
@@ -27,11 +27,11 @@ interface PluginInterface {
 class PluginBaseAbstract implements PluginInterface {
 
   /**
-   * The context object for this plugin.
+   * The config object for this plugin.
    *
-   * @var PluginContextInterface
+   * @var PluginConfigInterface
    */
-  protected $context;
+  protected $config;
 
   /**
    * The routing information used to retrieve this object.
@@ -47,8 +47,8 @@ class PluginBaseAbstract implements PluginInterface {
    */
   protected $definition = array();
 
-  public function __construct($context, array $definition, array $routing = array()) {
-    $this->context = $context;
+  public function __construct($config, array $definition, array $routing = array()) {
+    $this->config = $config;
     $this->definition = $definition;
     $this->routing = $routing;
   }

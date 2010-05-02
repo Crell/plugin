@@ -6,7 +6,7 @@ function plugin_test_plugin_type_info() {
     'title' => t('Fancy string mangling'),
     'description' => t('Mutate strings in various ways'),
     'interface' => 'FancyStringPluginInterface',
-    'context' => 'FancyStringContextInterface',
+    'config' => 'FancyStringConfigInterface',
     'controller' => 'PluginControllerVariableReuse',
     'default' => 'FancyStringDummy',
 		);
@@ -35,7 +35,7 @@ function plugin_test_plugin_info_alter(&$plugins) {
     'title' => t('ROT'),
     'description' => t('ROT encode a string to an arbitrary number.'),
     'class' => 'FancyStringRot',
-    'context' => 'FancyStringRotContext',
+    'config' => 'FancyStringRotConfig',
   );
 }
 

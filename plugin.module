@@ -103,7 +103,7 @@ function plugin_type_defaults() {
     'title' => '',
     'description' => '',
     'interface' => 'PluginInterface',
-    'context' => 'PluginContextInterface',
+    'config' => 'PluginConfigInterface',
     'controller' => 'PluginControllerVariableReuse',
     'default' => '',
   );
@@ -117,7 +117,7 @@ function plugin_defaults() {
     'title' => '',
     'description' => '',
     'class' => 'PluginBase',
-    'context' => 'PluginContextNull',
+    'config' => 'PluginConfigNull',
   );
 }
 

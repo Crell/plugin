@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Main interface for all plugin context objects.
+ * Main interface for all plugin config objects.
  */
-interface PluginContextInterface {
+interface PluginConfigInterface {
 
   /**
-   * Define the available options for this context, and their defaults.
+   * Define the available options for this config, and their defaults.
    *
    * @return array
    *   An associative array of options and their default values.
@@ -37,13 +37,13 @@ interface PluginContextInterface {
 
 
 /**
- * Null implementation of plugin context.
+ * Null implementation of plugin config.
  *
  * This is useful for plugins that do not have configuration.
  * @author lgarfiel
  *
  */
-class PluginContextNull implements PluginContextInterface {
+class PluginConfigNull implements PluginConfigInterface {
 
   public function options() {
     return array();
@@ -59,12 +59,12 @@ class PluginContextNull implements PluginContextInterface {
 }
 
 /**
- * A base implementation of a plugin context object.
+ * A base implementation of a plugin config object.
  */
-abstract class PluginContextBaseAbstract implements PluginContextInterface {
+abstract class PluginConfigBaseAbstract implements PluginConfigInterface {
 
   /**
-   * The options stored in this context object.
+   * The options stored in this config object.
    *
    * @var array
    */

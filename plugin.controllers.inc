@@ -24,18 +24,18 @@ interface PluginControllerInterface {
   public function load(array $routing = array());
 
   /**
-   * Attach the specified plugin and context with the specified routing information.
+   * Attach the specified plugin and config with the specified routing information.
    *
    * @param  $plugin
    *   The internal name of the plugin.
-   * @param PluginContextInterface $context
-   *   The context object to use for this plugin.
+   * @param PluginConfigInterface $config
+   *   The config object to use for this plugin.
    * @param array $routing
    *   An array of routing information that should retrieve this plugin and
-   *   context. The keys of the array are controller-dependent.
+   *   config. The keys of the array are controller-dependent.
    * @return unknown_type
    */
-  public function attach($plugin, PluginContextInterface $context, array $routing = array());
+  public function attach($plugin, PluginConfigInterface $config, array $routing = array());
 
   /**
    * Detach any specified plugin from the specified routing information.
@@ -51,11 +51,11 @@ interface PluginControllerInterface {
    *
    * @param $plugin
    *   The internal name of the plugin.
-   * @param PluginContextInterface $context
-   *   The context object to use for this plugin.
+   * @param PluginConfigInterface $config
+   *   The config object to use for this plugin.
    * @return unknown_type
    */
-  public function setDefault($plugin, PluginContextInterface $context);
+  public function setDefault($plugin, PluginConfigInterface $config);
 
   /**
    * Set default properties for a plugin.
@@ -75,7 +75,7 @@ interface PluginControllerInterface {
  * This controller can also be used for "no routing" plugin types by just
  * not specifying any routing information. Routing information is stored
  * to the variable system for fast lookup. Note that it is not well suited
- * for controllers with highly complex context objects as those will bloat
+ * for controllers with highly complex config objects as those will bloat
  * the variable table.
  */
 class PluginControllerVariable implements PluginControllerInterface {
@@ -105,20 +105,20 @@ class PluginControllerVariable implements PluginControllerInterface {
     $variable = 'plugin_' . $this->pluginType . '_' . $routing['key'];
     $plugin = variable_get($variable, NULL);
     if ($plugin) {
-      list($plugin, $context) = $plugin;
-      $context = unserialize($context);
+      list($plugin, $config) = $plugin;
+      $config = unserialize($config);
       $plugin_info = plugin_get_info($this->pluginType, $plugin);
-      return new $plugin_info['class']($context, $plugin_info, $routing);
+      return new $plugin_info['class']($config, $plugin_info, $routing);
     }
     else {
       $plugin = $this->typeInfo['default'];
       $plugin_info = plugin_get_info($this->pluginType, $plugin);
-      $context = new $plugin_info['context'];
-      return new $plugin_info['class']($context, $plugin_info, $routing);
+      $config = new $plugin_info['config'];
+      return new $plugin_info['class']($config, $plugin_info, $routing);
     }
   }
 
-  public function attach($plugin, PluginContextInterface $context, array $routing = array()) {
+  public function attach($plugin, PluginConfigInterface $config, array $routing = array()) {
 
   }
 
@@ -126,7 +126,7 @@ class PluginControllerVariable implements PluginControllerInterface {
 
   }
 
-  public function setDefault($plugin, PluginContextInterface $context) {
+  public function setDefault($plugin, PluginConfigInterface $config) {
 
   }
 
