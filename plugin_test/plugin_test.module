@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Implements hook_plugin_type_info().
+ */
 function plugin_test_plugin_type_info() {
 
 	$types['fancystring'] = array(
@@ -14,6 +17,11 @@ function plugin_test_plugin_type_info() {
 	return $types;
 }
 
+/**
+ * Implements hook_plugin_info().
+ *
+ * I think we actually deprecated the generic function...
+ */
 function plugin_test_plugin_info() {
 
   $plugins['dummy'] = array(
@@ -30,6 +38,11 @@ function plugin_test_plugin_info() {
 	return $plugins;
 }
 
+/**
+ * Implements hook_plugin_info_alter().
+ *
+ * I think we actually deprecated the generic function...
+ */
 function plugin_test_plugin_info_alter(&$plugins) {
   $plugins['rot'] = array(
     'title' => t('ROT'),
@@ -40,19 +53,16 @@ function plugin_test_plugin_info_alter(&$plugins) {
 }
 
 interface FancyStringPluginInterface extends PluginInterface {
-
   public function mutate($string);
 }
 
 class FancyStringRot13 extends PluginBaseAbstract implements FancystringPluginInterface {
-
 	public function mutate($string) {
     return str_rot13($string);
 	}
 }
 
 class FancyStringRot extends PluginBaseAbstract implements FancyStringPluginInterface {
-
   public function mutate($string) {
     // @TODO: Implement this.
     return $string;
