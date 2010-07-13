@@ -51,7 +51,7 @@ function plugin_get_info($type, $plugin = NULL) {
   $info_key = 'plugin_info_' . $type;
 
   if (empty($plugin_info[$type])) {
-    if ($cache = cache_get($info_key)) {
+    if (FALSE && $cache = cache_get($info_key)) {
       $plugin_info[$type] = $cache->data;
     }
     else {

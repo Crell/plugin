@@ -2,5 +2,5 @@ name = Plugin Test
 description = Test module for plugins
 core = 7.x
 files[] = plugin_test.module
-hidden = TRUE
+;hidden = TRUE
 dependencies[] = plugin

@@ -1,6 +1,36 @@
 <?php
 
 /**
+ * Implements hook_menu().
+ *
+ * This is just a dummy for testing things faster than unit tests can, because
+ * unit tests are horrifically slow due to the installer being slow as hell.
+ */
+function plugin_test_menu() {
+  $items['plugin'] = array(
+    'title' => 'Plugin test',
+    'page callback' => 'plugin_test_page',
+    'access arguments' => array('access content'),
+    
+  );
+
+  return $items;
+}
+
+/**
+ * Dummy page callback for testing things faster than unit tests can.
+ */
+function plugin_test_page() {
+  $plugins = plugin_get_info('fancystring');
+
+  $plugin_names = array_keys($plugins);
+
+  dpm($plugin_names);
+
+  return 'x';
+}
+
+/**
  * Implements hook_plugin_type_info().
  */
 function plugin_test_plugin_type_info() {
@@ -22,7 +52,7 @@ function plugin_test_plugin_type_info() {
  *
  * I think we actually deprecated the generic function...
  */
-function plugin_test_plugin_info() {
+function plugin_test_plugin_fancystring_info() {
 
   $plugins['dummy'] = array(
     'title' => t('Dummy'),
