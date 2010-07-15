@@ -37,7 +37,7 @@ function plugin_type_get_info($type = NULL) {
  * Get the plugin type info array of a plugin type.
  *
  * @see hook_plugin_$type_info()
- * @see hook_plugin_$type_info_alter()
+ * @see hook_plugin_info_$type_alter()
  *
  * @param $type
  *   The plugin type for which the info shall be returned.
