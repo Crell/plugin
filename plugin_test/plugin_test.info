@@ -4,3 +4,5 @@ core = 7.x
 files[] = plugin_test.module
 ;hidden = TRUE
 dependencies[] = plugin
+
+plugins[fancystring][uppercase] = uppercase.inc

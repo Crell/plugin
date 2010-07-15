@@ -48,13 +48,12 @@ class PluginTestCase extends DrupalWebTestCase {
   /**
    * Confirm that test plugins register properly from an info file.
    */
-  /*function testInfoRegistration() {
+  function testInfoRegistration() {
     $plugins = plugin_get_info('fancystring');
 
     $plugin_names = array_keys($plugins);
     $this->assertTrue(in_array('uppercase', $plugin_names), t('Plugin type is registered from info file'));
   }
-  */
 
 
   /**

@@ -63,7 +63,7 @@ function plugin_get_info($type, $plugin = NULL) {
 
       // Registration via info files is also supported.
       $modules = system_get_info('module');
-      //dpm($modules);
+
       foreach ($modules as $module => $info) {
         if (!empty($info['plugins'][$type])) {
           foreach ($info['plugins'][$type] as $plugin_key => $file) {

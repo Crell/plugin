@@ -104,3 +104,8 @@ class FancyStringDummy extends PluginBaseAbstract implements FancyStringPluginIn
   }
 }
 
+class FancyStringUppercase extends PluginBaseAbstract implements FancyStringPluginInterface {
+  public function mutate($string) {
+    return strtoupper($string);
+  }
+}
