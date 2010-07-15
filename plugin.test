@@ -37,13 +37,13 @@ class PluginTestCase extends DrupalWebTestCase {
   /**
    * Confirm that test plugins register properly from the alter hook.
    */
-  /*function testAlterHookRegistration() {
+  function testAlterHookRegistration() {
     $plugins = plugin_get_info('fancystring');
 
     $plugin_names = array_keys($plugins);
     $this->assertTrue(in_array('rot', $plugin_names), t('Plugin type is registered from type-specific alter hook'));
   }
-   */
+  
 
   /**
    * Confirm that test plugins register properly from an info file.
@@ -101,11 +101,13 @@ class PluginTestCommonClassCase extends DrupalWebTestCase {
   /**
    * Confirm that we get the right controller for a given plugin type.
    */
+  /*
   function testPluginHello() {
     $plugin = plugin('callback_test');
 
     $this->assertEqual($plugin->runCallback(), t('Hello world'), t('Passed through to callback properly.'));
   }
+   */
 
 }
 

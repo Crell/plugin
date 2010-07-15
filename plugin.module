@@ -84,7 +84,7 @@ function plugin_get_info($type, $plugin = NULL) {
       // Let other modules alter the plugin info.
       drupal_alter($info_key, $plugin_info[$type]);
 
-      cache_set($info_key, $plugin_info[$type]);
+      //cache_set($info_key, $plugin_info[$type]);
     }
   }
 

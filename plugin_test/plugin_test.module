@@ -69,11 +69,9 @@ function plugin_test_plugin_fancystring_info() {
 }
 
 /**
- * Implements hook_plugin_info_alter().
- *
- * I think we actually deprecated the generic function...
+ * Implements hook_plugin_info_fancystring_alter().
  */
-function plugin_test_plugin_info_alter(&$plugins) {
+function plugin_test_plugin_info_fancystring_alter(&$plugins) {
   $plugins['rot'] = array(
     'title' => t('ROT'),
     'description' => t('ROT encode a string to an arbitrary number.'),
