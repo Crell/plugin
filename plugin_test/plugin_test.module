@@ -11,7 +11,7 @@ function plugin_test_menu() {
     'title' => 'Plugin test',
     'page callback' => 'plugin_test_page',
     'access arguments' => array('access content'),
-    
+
   );
 
   return $items;
@@ -35,16 +35,16 @@ function plugin_test_page() {
  */
 function plugin_test_plugin_type_info() {
 
-	$types['fancystring'] = array(
+  $types['fancystring'] = array(
     'title' => t('Fancy string mangling'),
     'description' => t('Mutate strings in various ways'),
     'interface' => 'FancyStringPluginInterface',
     'config' => 'FancyStringConfigInterface',
     'controller' => 'PluginControllerVariableReuse',
     'default' => 'FancyStringDummy',
-		);
+  );
 
-	return $types;
+  return $types;
 }
 
 /**
@@ -59,13 +59,13 @@ function plugin_test_plugin_fancystring_info() {
     'description' => t('Dummy implementation that does nothing.'),
     'class' => 'FancyStringDummy',
   );
-	 $plugins['rot13'] = array(
+   $plugins['rot13'] = array(
     'title' => t('ROT 13'),
     'description' => t('ROT13 encode a string'),
     'class' => 'FancyStringRot13',
   );
 
-	return $plugins;
+  return $plugins;
 }
 
 /**
@@ -85,9 +85,9 @@ interface FancyStringPluginInterface extends PluginInterface {
 }
 
 class FancyStringRot13 extends PluginBaseAbstract implements FancystringPluginInterface {
-	public function mutate($string) {
+  public function mutate($string) {
     return str_rot13($string);
-	}
+  }
 }
 
 class FancyStringRot extends PluginBaseAbstract implements FancyStringPluginInterface {
